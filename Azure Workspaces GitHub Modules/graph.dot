@@ -1,0 +1,31 @@
+digraph G {
+  rankdir = "RL";
+  node [shape = rect, fontname = "sans-serif"];
+  subgraph "cluster_module.network" {
+    label = "module.network"
+    fontname = "sans-serif"
+    "module.network.azurerm_subnet.main" [label="azurerm_subnet.main"];
+    "module.network.azurerm_virtual_network.main" [label="azurerm_virtual_network.main"];
+  }
+  subgraph "cluster_module.resource_group" {
+    label = "module.resource_group"
+    fontname = "sans-serif"
+    "module.resource_group.azurerm_resource_group.main" [label="azurerm_resource_group.main"];
+  }
+  subgraph "cluster_module.storage" {
+    label = "module.storage"
+    fontname = "sans-serif"
+    "module.storage.azurerm_storage_account.main" [label="azurerm_storage_account.main"];
+  }
+  subgraph "cluster_module.vm" {
+    label = "module.vm"
+    fontname = "sans-serif"
+    "module.vm.azurerm_linux_virtual_machine.main" [label="azurerm_linux_virtual_machine.main"];
+    "module.vm.azurerm_network_interface.main" [label="azurerm_network_interface.main"];
+  }
+  "module.network.azurerm_subnet.main" -> "module.network.azurerm_virtual_network.main";
+  "module.network.azurerm_virtual_network.main" -> "module.resource_group.azurerm_resource_group.main";
+  "module.storage.azurerm_storage_account.main" -> "module.resource_group.azurerm_resource_group.main";
+  "module.vm.azurerm_linux_virtual_machine.main" -> "module.vm.azurerm_network_interface.main";
+  "module.vm.azurerm_network_interface.main" -> "module.network.azurerm_subnet.main";
+}
